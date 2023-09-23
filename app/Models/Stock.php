@@ -12,7 +12,7 @@ class Stock extends Model
       'in_stock' => 'boolean',
     ];
 
-    public function track()
+    public function track(): void
     {
         $status = $this->retailer
             ->client()

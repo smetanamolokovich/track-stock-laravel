@@ -15,7 +15,7 @@ class RetailerWithProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $switch = Product::create(['name' => 'Nintendo Switch']);
+        $switch = Product::create(['name' => 'Nintendo Switch OLED']);
 
         $bestBuy = Retailer::create(['name' => 'Best Buy']);
 

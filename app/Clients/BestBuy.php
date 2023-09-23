@@ -3,19 +3,24 @@
 namespace App\Clients;
 
 use App\Models\Stock;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Http;
 
 class BestBuy implements Client
 {
-    use HasFactory;
     public function checkAvailability(Stock $stock): StockStatus
     {
-        $result = Http::get('https://foo.test')->json();
+        $results = Http::get($this->endpoint($stock->sku))->json();
 
         return new StockStatus(
-            $result['available'],
-            $result['price'],
+            $results['onlineAvailability'],
+            $results['salePrice'],
         );
+    }
+
+    protected function endpoint($sku): string
+    {
+        $apiKey = config('services.clients.bestBuy.key');
+
+        return "https://api.bestbuy.com/v1/products/{$sku}.json?apiKey={$apiKey}";
     }
 }
