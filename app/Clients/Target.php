@@ -2,7 +2,6 @@
 
 namespace App\Clients;
 
-use App\Clients\Client;
 use App\Models\Stock;
 
 class Target implements Client
