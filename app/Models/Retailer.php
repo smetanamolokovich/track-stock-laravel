@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Facades\App\Clients\ClientFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,5 +19,10 @@ class Retailer extends Model
     public function stock(): HasMany
     {
         return $this->hasMany(Stock::class);
+    }
+
+    public function client()
+    {
+        return ClientFactory::make($this);
     }
 }
