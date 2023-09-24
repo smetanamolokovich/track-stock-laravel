@@ -1,9 +1,11 @@
 <?php
 
 
+use App\Clients\StockStatus;
 use App\Models\History;
-use App\Models\Stock;
+use App\Models\Product;
 use Database\Seeders\RetailerWithProductSeeder;
+use Facades\App\Clients\ClientFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,19 +17,21 @@ class ProductHistoryTest extends TestCase
     {
         $this->seed(RetailerWithProductSeeder::class);
 
-        Http::fake(fn () => ['salePrice' => 99, 'onlineAvailability' => false]);
+        ClientFactory::shouldReceive('make->checkAvailability')
+            ->andReturn(new StockStatus($available = true,  $price = 99));
 
-        $this->assertEquals(0, History::count());
+        $product = tap(Product::first(), function ($product) {
+            $this->assertCount(0, $product->history);
 
-        $stock = tap(Stock::first())->track();
+            $product->track();
 
-        $this->assertEquals(1, History::count());
+            $this->assertCount(1, $product->refresh()->history);
+        });
 
-        $history = History::first();
-
-        $this->assertEquals($stock->price, $history->price);
-        $this->assertEquals($stock->in_stock, $history->in_stock);
-        $this->assertEquals($stock->product_id, $history->product_id);
-        $this->assertEquals($stock->id, $history->stock_id);
+        $history = $product->history->first();
+        $this->assertEquals($price, $history->price);
+        $this->assertEquals($available, $history->in_stock);
+        $this->assertEquals($product->id, $history->product_id);
+        $this->assertEquals($product->stock[0]->id, $history->stock_id);
     }
 }
