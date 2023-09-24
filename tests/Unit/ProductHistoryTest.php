@@ -1,11 +1,7 @@
 <?php
 
-
-use App\Clients\StockStatus;
-use App\Models\History;
 use App\Models\Product;
 use Database\Seeders\RetailerWithProductSeeder;
-use Facades\App\Clients\ClientFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
