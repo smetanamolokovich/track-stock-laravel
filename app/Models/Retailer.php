@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Facades\App\Clients\ClientFactory;
 use App\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Retailer extends Model
 {
+    use HasFactory;
     public function addStock(Product $product, Stock $stock): void
     {
         $stock->product_id = $product->id;

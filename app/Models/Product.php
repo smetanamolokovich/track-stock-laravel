@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
+    use HasFactory;
     public function inStock(): bool
     {
         return $this->stock()->where('in_stock', true)->exists();
